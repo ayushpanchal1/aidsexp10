@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Application Development</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .chart {
+            width: 45%;
+            height: 400px;
+            margin-bottom: 30px;
+        }
+
+        .steps-list {
+            margin-top: 30px;
+        }
+
+        .steps-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Cognitive Application Development Steps</h1>
+</header>
+
+<div class="container">
+    <h2>Data Visualization with Google Charts and D3.js</h2>
+
+    <div class="chart-container">
+        <div id="google-pie-chart" class="chart"></div>
+        <div id="d3-bar-chart" class="chart"></div>
+    </div>
+
+    <h2>Development Steps</h2>
+    <ol class="steps-list">
+        <li>Step 1: Define the Problem</li>
+        <li>Step 2: Data Collection & Preprocessing</li>
+        <li>Step 3: Feature Engineering</li>
+        <li>Step 4: Model Selection</li>
+        <li>Step 5: Model Training</li>
+        <li>Step 6: Model Evaluation</li>
+        <li>Step 7: Deploy and Monitor</li>
+    </ol>
+</div>
+
+<footer>
+    <p>&copy; 2024 Cognitive App Development | All Rights Reserved</p>
+</footer>
+
+<script type="text/javascript">
+    // Load Google Charts library
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Google Pie Chart
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Step', 'Progress'],
+            ['Define the Problem', 10],
+            ['Data Collection', 20],
+            ['Feature Engineering', 15],
+            ['Model Selection', 25],
+            ['Model Training', 30],
+        ]);
+
+        var options = {
+            title: 'Cognitive Application Development Progress',
+            is3D: true,
+            colors: ['#4CAF50', '#FF8C00', '#FFD700', '#FF4500', '#00CED1']
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('google-pie-chart'));
+        chart.draw(data, options);
+    }
+
+    // D3.js Bar Chart
+    const data = [
+        { step: 'Step 1', value: 10 },
+        { step: 'Step 2', value: 20 },
+        { step: 'Step 3', value: 15 },
+        { step: 'Step 4', value: 25 },
+        { step: 'Step 5', value: 30 }
+    ];
+
+    const svg = d3.select("#d3-bar-chart")
+        .append("svg")
+        .attr("width", 400)
+        .attr("height", 400);
+
+    const margin = { top: 20, right: 20, bottom: 30, left: 40 },
+          width = +svg.attr("width") - margin.left - margin.right,
+          height = +svg.attr("height") - margin.top - margin.bottom;
+
+    const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleBand()
+        .domain(data.map(d => d.step))
+        .rangeRound([0, width])
+        .padding(0.1);
+
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.value)])
+        .nice()
+        .rangeRound([height, 0]);
+
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(x));
+
+    g.append("g")
+        .attr("class", "axis axis--y")
+        .call(d3.axisLeft(y).ticks(5));
+
+    g.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", d => x(d.step))
+        .attr("y", d => y(d.value))
+        .attr("width", x.bandwidth())
+        .attr("height", d => height - y(d.value))
+        .attr("fill", "#4CAF50");
+</script>
+
+</body>
+</html>
